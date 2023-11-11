@@ -1,11 +1,11 @@
-import { ThirdwebAuth } from "@thirdweb-dev/auth/express";
+import { ThirdwebAuth } from "@thirdweb-dev/auth/fastify";
 import { PrivateKeyWallet } from "@thirdweb-dev/auth/evm";
 import { config } from "dotenv";
-import express from "express";
+import Fastify from "fastify";
 
 config();
 
-const app = express();
+const app = Fastify();
 const PORT = 8000;
 
 // NOTE: This users map is for demo purposes. Its used to show the power of
@@ -55,26 +55,31 @@ const { authRouter, authMiddleware, getUser } = ThirdwebAuth({
   },
 });
 
-// We add the auth middleware to our app to let us access the user across our API
-app.use(authMiddleware);
-
 // Now we add the auth router to our app to set up the necessary auth routes
-app.use("/auth", authRouter);
+app.register(authRouter, { prefix: "/auth" });
+
+// We add the auth middleware to our app to let us access the user across our API
+app.register(authMiddleware);
 
 app.get("/secret", async (req, res) => {
   const user = await getUser(req);
 
   if (!user) {
-    return res.status(401).json({
+    return res.code(401).send({
       message: "Not authorized.",
     });
   }
 
-  return res.status(200).json({
+  return res.code(200).send({
     message: "This is a secret... don't tell anyone.",
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+app.listen({ port: PORT }, (err, address) => {
+  if (err) {
+    console.error("Error starting server:", err);
+    process.exit(1);
+  }
+
+  console.log(`Server listening at ${address}`);
 });

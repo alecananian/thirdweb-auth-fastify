@@ -1,20 +1,20 @@
 ## Getting Started
 
-This example demonstrates how to use thirdweb Auth with an express backend and react frontend.
+This example demonstrates how to use thirdweb Auth with a [fastify](https://fastify.dev) backend and React frontend.
 
-To run this project, you need will first need to install the dependencies for the client and express backend with the following commands:
+To run this project, you need will first need to install the dependencies for the client and backend with the following commands:
 
 ```bash
 cd client && npm install
-cd express && npm install
+cd server && npm install
 # or
 cd client && yarn install
-cd express && yarn install
+cd server && yarn install
 ```
 
-Next, you need to create a `/express/.env` file (within the `/express`) directory and add the `ADMIN_PRIVATE_KEY` variable to it with the private key of the wallet you want to use as the admin wallet to generate and verify payloads. Your file should use something like the following:
+Next, you need to create a `/server/.env` file (within the `/server`) directory and add the `ADMIN_PRIVATE_KEY` variable to it with the private key of the wallet you want to use as the admin wallet to generate and verify payloads. Your file should use something like the following:
 
-```/express/.env
+```/server/.env
 ADMIN_PRIVATE_KEY=...
 ```
 
